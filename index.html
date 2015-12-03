@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+<div id="cards_container">
+  <!-- where the divs will be inserted -->
+</div>
+<script>
+
+//---------begin input --------------//
+	
+	//how many images?
+	var NUM_IMGS = 20;
+
+	//how many images do you want to display across?
+	var NUM_IMG_ACROSS = 5;
+	
+	//define the width of each image in pixels
+	var IMAGE_WIDTH = 120;
+
+	//define youre speed in seconds you want the animation to take
+	var SPEED = 3;
+
+	//define the time to iterate the flip in seconds. use 0 if not
+	var ITERATION = 1;
+
+
+//---------end input --------------//
+
+	function createFlipDivs(){
+		//document.getElementById("random_flip").innerHtml = ""
+		var cards = document.getElementById('cards_container');
+		for(i = 1; i < NUM_IMGS + 1; i++) {
+			cards.innerHTML = cards.innerHTML + '\
+			<div id="random_flip" data-id="'+ i +'">\
+				<div class="front" style="content: url(images/front/' + i + '.jpg);"></div>\
+				<div class="back" style="content: url(images/back/' + i  + '.jpg);"/></div>\
+			</div>';
+			//if you've hit the end of the line
+			if (i%NUM_IMG_ACROSS == 0){
+				cards.innerHTML = cards.innerHTML + '<br>';
+			}
+  		}
+  		
+	}
+
+	function flipCards(){
+
+			//set speed of each box so total will be user input
+			var speed = SPEED*1000/NUM_IMGS;
+
+			//start at the top left card
+			var cardIndex = 0;
+	  		
+		  	//store cards as list
+		  	var cards = document.querySelectorAll("#random_flip");
+		  	
+		  	//what direction are we flipping
+	   		if (FORWARD){
+	   			console.log("flipping forward");
+		  		//every "speed" seconds call nextCard
+		    	var myTimer = setInterval(nextCard, speed);
+	 		}
+	 		else{
+	 			console.log("flipping backwards");
+	 			//every "speed" seconds call nextCard
+		    	var myTimer = setInterval(prevCard, speed);
+	 		}
+
+	 		function nextCard() {
+	   			var c = cards[cardIndex].classList;
+	   			c.add("flipped");
+	   			cardIndex = cardIndex + 1;
+	   			if (cardIndex == NUM_IMGS){
+	   				clearInterval(myTimer);
+	   			}
+	  		}
+
+	  		function prevCard() {
+	   			var c = cards[cardIndex].classList;
+	   			c.remove("flipped");
+	   			cardIndex = cardIndex + 1;
+	   			if (cardIndex == NUM_IMGS){
+	   				clearInterval(myTimer);
+	   			}
+	  		}
+	  		
+		}
+
+//Start your engines!!
+createFlipDivs();
+
+//set the direction to flip forward
+var FORWARD = true;
+
+console.log(FORWARD);
+
+//wait to flip over
+setTimeout(flipCards, 1000);
+
+
+//End of image flip
+
+</script>
+
+</body>
+</html>

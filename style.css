@@ -1,0 +1,34 @@
+#random_flip{
+  display:inline-block;
+  overflow: hidden;
+  margin:0;
+  padding-left:115px;
+  padding-bottom:96px;
+}
+
+#random_flip.flipped .front {
+  -webkit-transform: rotateY(-180deg);
+          transform: rotateY(-180deg);
+}
+
+#random_flip.flipped .back {
+  -webkit-transform: rotateY(0);
+          transform: rotateY(0);
+}
+
+.front,
+.back {
+  position: absolute;
+  display: inline-block;
+  width: 120px;
+  height: 100px;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-transition: -webkit-transform 0.3s;
+          transition: transform 0.3s;
+}
+
+.back {
+  -webkit-transform: rotateY(-180deg);
+          transform: rotateY(-180deg);
+}
