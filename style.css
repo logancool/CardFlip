@@ -1,4 +1,7 @@
-
+#cards_container{
+    font-size: 0; /* removes inline block whitespace */
+    margin: auto;
+}
 
 #ad_container, #wc_container {
     position: absolute;
@@ -13,6 +16,8 @@
     display:inline-block;
     overflow: hidden;
     margin:0;
+    vertical-align:top;
+    font-size:0;
 }
 
 #card.flipped .front {
@@ -33,10 +38,15 @@
     backface-visibility: hidden;
     -webkit-transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
+    margin:0;
+    align:left;
+    vertical-align:top;
 }
 
 .back {
     position:absolute;
     -webkit-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
+    margin:0;
+    vertical-align:top;
 }

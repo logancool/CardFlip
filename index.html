@@ -25,6 +25,8 @@
 	var height = 1;
 	var loadedOne = false;
 	var loc = "images/";
+	var offX = 0;
+	var offY = 0;
 	//how many images?
 
 	//image source name
@@ -92,15 +94,15 @@
 							'width:' + CARD[width] + 'px;' +
 							'height:' + CARD[height] + 'px;' +
 							'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
-							'margin-left: -4px;' +
+							'margin-left: -' + offX + 'px;' +
+							'margin-top: -' + offY + 'px;' +
 							'display: inline-block;' +
 							'background-image: url(' + AD_UNIT.src + ');"></div>\
 						<div class="back" style="' +
 							'width:' + CARD[width] + 'px;' +
 							'height:' + CARD[height] + 'px;' +
 							'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
-							'margin-left: -4px;' +
-							'margin-top: -' + CARD[height] + 'px;' +
+							'margin-left: -' + CARD[width] + 'px;' +
 							'display: inline-block;' +
 							'background-image: url(' + WEBCAP.src + ');">\
 						</div>\
