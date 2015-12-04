@@ -71,7 +71,6 @@
 			console.log("CARD height: " + CARD[height]);
 
 			createFlipDivs();
-
 			FORWARD = true;
 			flipCards();
 		}
@@ -88,21 +87,31 @@
 			for(j = 1; j < NUM_IMG_ACROSS + 1; j++) {
 				console.log("here");
 				CARDS.innerHTML = CARDS.innerHTML + '\
-				<div id="card" data-id="' + i + j + '" style="' +
-						'width:' + CARD[width] + 'px;' +
-						'height:' + CARD[height] + 'px;' +
-						'background-image: url(' + AD_UNIT.src + ');' +
-						'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
-						'margin-left: -4px;' +
-						'display: inline-block;">\
+				<div id="card" data-number="' + i + j + '" style="">\
+						<div class="front" style="' +
+							'width:' + CARD[width] + 'px;' +
+							'height:' + CARD[height] + 'px;' +
+							'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
+							'margin-left: -4px;' +
+							'display: inline-block;' +
+							'background-image: url(' + AD_UNIT.src + ');"></div>\
+						<div class="back" style="' +
+							'width:' + CARD[width] + 'px;' +
+							'height:' + CARD[height] + 'px;' +
+							'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
+							'margin-left: -4px;' +
+							'margin-top: -' + CARD[height] + 'px;' +
+							'display: inline-block;' +
+							'background-image: url(' + WEBCAP.src + ');">\
+						</div>\
 				</div>';
-
 				//if you've hit the end of the line
 				if (i % NUM_IMG_ACROSS == 0) {
 					CARDS.innerHTML = CARDS.innerHTML + '<br>';
 				}
 			}
   		}
+
   		
 	}
 
@@ -115,7 +124,7 @@
 			var cardIndex = 0;
 
 		  	//store cards as list
-		  	var cards = document.querySelectorAll("#card");
+		  	var cardList = document.querySelectorAll("#card");
 
 		  	//what direction are we flipping
 	   		if (FORWARD){
@@ -130,7 +139,7 @@
 	 		}
 
 	 		function nextCard() {
-	   			var c = cards[cardIndex].classList;
+	   			var c = cardList[cardIndex].classList;
 	   			c.add("flipped");
 	   			cardIndex = cardIndex + 1;
 	   			if (cardIndex == numImgs){
@@ -139,14 +148,13 @@
 	  		}
 
 	  		function prevCard() {
-	   			var c = CARDS[cardIndex].classList;
-	   			c.remove("flipped");
-	   			cardIndex = cardIndex + 1;
-	   			if (cardIndex == numImgs){
-	   				clearInterval(myTimer);
-	   			}
-	  		}
-	  		
+				var c = cardList[cardIndex].classList;
+				c.remove("flipped");
+				cardIndex = cardIndex + 1;
+				if (cardIndex == numImgs) {
+					clearInterval(myTimer);
+				}
+			}
 		}
 
 </script>
