@@ -16,7 +16,7 @@
 </div>
 <script>
 
-//---------begin input --------------//
+
 	var WEBCAP = document.getElementById("wc_container");
 	var AD_UNIT = document.getElementById("ad_container");
 	var CARDS = document.getElementById('cards_container');
@@ -27,20 +27,18 @@
 	var loc = "images/";
 	var offX = 0;
 	var offY = 0;
-	//how many images?
+	var cardIndex = 0;
+	var cardTimer;
+
+//---------begin input --------------//
 
 	//image source name
 	WEBCAP.src = loc + "WC_1.png";
 	AD_UNIT.src = loc + "panda.png";
 
-	WEBCAP.style.display = "none";
-	AD_UNIT.style.display = "none";
-
-    //how many images do you want to display across?
-	var NUM_IMG_ACROSS = 5;
-	var NUM_IMG_DOWN = 4;
-	var numImgs = NUM_IMG_ACROSS*NUM_IMG_DOWN;
-	//define the width of each image in pixels
+    //how many images do you want to display across? (1 - 20)
+	var NUM_IMG_ACROSS = 10;
+	var NUM_IMG_DOWN = 1;
 
 	//define youre speed in seconds you want the animation to take
 	var SPEED = 3;
@@ -48,10 +46,31 @@
 	//define the time to iterate the flip in seconds. use 0 if not
 	var ITERATION = 1;
 
+//---------end input --------------//
+
+
+	if (NUM_IMG_ACROSS > 20) NUM_IMG_ACROSS = 20; //failsafe for high computation
+	if (NUM_IMG_DOWN > 20) NUM_IMG_DOWN = 20; // also a failsafe
+	var numImgs = NUM_IMG_ACROSS*NUM_IMG_DOWN;
+
+	WEBCAP.style.display = "none";
+	AD_UNIT.style.display = "none";
+
+	//set speed of each box so total will be user input
+	SPEED = SPEED*1000/numImgs;
+
 	function ensureMatchedSize(){
-		if (WEBCAP.style.width != AD_UNIT.style.width){
-			AD_UNIT.style.width = WEBCAP.style.width;
+		console.log("WC: " + WEBCAP.width + " AD: " + AD_UNIT.width);
+		if (WEBCAP.width != AD_UNIT.width){
+			console.log("These sizes don't match");
+			return false;
 		}
+		else {
+			return true;
+		}
+	}
+	function displayDefault(){
+		AD_UNIT.style.display = "block";
 	}
 
 	//make sure both the bg_img and ad_img have loaded before checking width and height
@@ -60,8 +79,6 @@
 		if (loadedOne){
 			//show the bg
 			//WEBCAP.style.display = "block";
-
-			ensureMatchedSize();
 
 			CARDS.style.width = WEBCAP.width + "px";
 			CARDS.style.height = WEBCAP.height + "px";
@@ -72,15 +89,29 @@
 			console.log("CARD width: " + CARD[width]);
 			console.log("CARD height: " + CARD[height]);
 
-			createFlipDivs();
-			FORWARD = true;
-			flipCards();
+			//if the sizes match, go ahead with the animation
+			if (ensureMatchedSize()) {
+
+				createFlipDivs();
+
+				//store cards as list
+				var cardList = document.querySelectorAll("#card");
+
+				//flip cards at interval
+				cardTimer = setInterval(function(){flipCard(cardList)}, SPEED);
+			}
+			else {
+				displayDefault();
+			}
 		}
 		else {
 			loadedOne = true;
 		}
 	});
-//---------end input --------------//
+
+	function closeClicked(){
+
+	}
 
 	function createFlipDivs(){
 		//document.getElementById("random_flip").innerHtml = ""
@@ -97,67 +128,33 @@
 							'margin-left: -' + offX + 'px;' +
 							'margin-top: -' + offY + 'px;' +
 							'display: inline-block;' +
-							'background-image: url(' + AD_UNIT.src + ');"></div>\
+							'background-image: url(' + WEBCAP.src + ');"></div>\
 						<div class="back" style="' +
 							'width:' + CARD[width] + 'px;' +
 							'height:' + CARD[height] + 'px;' +
 							'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
 							'margin-left: -' + CARD[width] + 'px;' +
 							'display: inline-block;' +
-							'background-image: url(' + WEBCAP.src + ');">\
+							'background-image: url(' + AD_UNIT.src + ');">\
 						</div>\
 				</div>';
-				//if you've hit the end of the line
-				if (i % NUM_IMG_ACROSS == 0) {
-					CARDS.innerHTML = CARDS.innerHTML + '<br>';
-				}
+
 			}
   		}
 
   		
 	}
 
-	function flipCards(){
-
-			//set speed of each box so total will be user input
-			var speed = SPEED*1000/numImgs;
-
-			//start at the top left card
-			var cardIndex = 0;
-
-		  	//store cards as list
-		  	var cardList = document.querySelectorAll("#card");
-
-		  	//what direction are we flipping
-	   		if (FORWARD){
-	   			console.log("flipping forward");
-		  		//every "speed" seconds call nextCard
-		    	var myTimer = setInterval(nextCard, speed);
-	 		}
-	 		else{
-	 			console.log("flipping backwards");
-	 			//every "speed" seconds call nextCard
-		    	var myTimer = setInterval(prevCard, speed);
-	 		}
-
-	 		function nextCard() {
-	   			var c = cardList[cardIndex].classList;
-	   			c.add("flipped");
-	   			cardIndex = cardIndex + 1;
-	   			if (cardIndex == numImgs){
-	   				clearInterval(myTimer);
-	   			}
-	  		}
-
-	  		function prevCard() {
-				var c = cardList[cardIndex].classList;
-				c.remove("flipped");
-				cardIndex = cardIndex + 1;
-				if (cardIndex == numImgs) {
-					clearInterval(myTimer);
-				}
+	function flipCard(cardList){
+			console.log("called!!!");
+			var c = cardList[cardIndex].classList;
+			c.add("flipped");
+			cardIndex = cardIndex + 1;
+			if (cardIndex == numImgs){
+				clearInterval(cardTimer);
 			}
-		}
+
+	}
 
 </script>
 
