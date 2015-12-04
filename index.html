@@ -2,26 +2,43 @@
 <html>
 
 <head>
-<link rel="stylesheet" type="text/css" href="style.css">
+	<title>Flipboard Testing</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 
 <body>
 
 <div id="cards_container">
   <!-- where the divs will be inserted -->
+	<img id="ad_container"/>
+	<img id="wc_container"/>
 </div>
 <script>
 
 //---------begin input --------------//
-	
+	var WEBCAP = document.getElementById("wc_container");
+	var AD_UNIT = document.getElementById("ad_container");
+	var CARDS = document.getElementById('cards_container');
+	var CARD = [2];
+	var width = 0;
+	var height = 1;
+	var loadedOne = false;
+	var loc = "images/";
 	//how many images?
-	var NUM_IMGS = 20;
 
-	//how many images do you want to display across?
+	//image source name
+	WEBCAP.src = loc + "WC_1.png";
+	AD_UNIT.src = loc + "panda.png";
+
+	WEBCAP.style.display = "none";
+	AD_UNIT.style.display = "none";
+
+    //how many images do you want to display across?
 	var NUM_IMG_ACROSS = 5;
-	
+	var NUM_IMG_DOWN = 4;
+	var numImgs = NUM_IMG_ACROSS*NUM_IMG_DOWN;
 	//define the width of each image in pixels
-	var IMAGE_WIDTH = 120;
 
 	//define youre speed in seconds you want the animation to take
 	var SPEED = 3;
@@ -29,21 +46,61 @@
 	//define the time to iterate the flip in seconds. use 0 if not
 	var ITERATION = 1;
 
+	function ensureMatchedSize(){
+		if (WEBCAP.style.width != AD_UNIT.style.width){
+			AD_UNIT.style.width = WEBCAP.style.width;
+		}
+	}
 
+	//make sure both the bg_img and ad_img have loaded before checking width and height
+	$("#wc_container, #ad_container").load(function() {
+
+		if (loadedOne){
+			//show the bg
+			//WEBCAP.style.display = "block";
+
+			ensureMatchedSize();
+
+			CARDS.style.width = WEBCAP.width + "px";
+			CARDS.style.height = WEBCAP.height + "px";
+
+			CARD[width] = (WEBCAP.width/NUM_IMG_ACROSS);
+			CARD[height] = (WEBCAP.height/NUM_IMG_DOWN);
+
+			console.log("CARD width: " + CARD[width]);
+			console.log("CARD height: " + CARD[height]);
+
+			createFlipDivs();
+
+			FORWARD = true;
+			flipCards();
+		}
+		else {
+			loadedOne = true;
+		}
+	});
 //---------end input --------------//
 
 	function createFlipDivs(){
 		//document.getElementById("random_flip").innerHtml = ""
-		var cards = document.getElementById('cards_container');
-		for(i = 1; i < NUM_IMGS + 1; i++) {
-			cards.innerHTML = cards.innerHTML + '\
-			<div id="random_flip" data-id="'+ i +'">\
-				<div class="front" style="content: url(images/front/' + i + '.jpg);"></div>\
-				<div class="back" style="content: url(images/back/' + i  + '.jpg);"/></div>\
-			</div>';
-			//if you've hit the end of the line
-			if (i%NUM_IMG_ACROSS == 0){
-				cards.innerHTML = cards.innerHTML + '<br>';
+
+		for(i = 1; i < NUM_IMG_DOWN + 1; i++) {
+			for(j = 1; j < NUM_IMG_ACROSS + 1; j++) {
+				console.log("here");
+				CARDS.innerHTML = CARDS.innerHTML + '\
+				<div id="card" data-id="' + i + j + '" style="' +
+						'width:' + CARD[width] + 'px;' +
+						'height:' + CARD[height] + 'px;' +
+						'background-image: url(' + AD_UNIT.src + ');' +
+						'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
+						'margin-left: -4px;' +
+						'display: inline-block;">\
+				</div>';
+
+				//if you've hit the end of the line
+				if (i % NUM_IMG_ACROSS == 0) {
+					CARDS.innerHTML = CARDS.innerHTML + '<br>';
+				}
 			}
   		}
   		
@@ -52,14 +109,14 @@
 	function flipCards(){
 
 			//set speed of each box so total will be user input
-			var speed = SPEED*1000/NUM_IMGS;
+			var speed = SPEED*1000/numImgs;
 
 			//start at the top left card
 			var cardIndex = 0;
-	  		
+
 		  	//store cards as list
-		  	var cards = document.querySelectorAll("#random_flip");
-		  	
+		  	var cards = document.querySelectorAll("#card");
+
 		  	//what direction are we flipping
 	   		if (FORWARD){
 	   			console.log("flipping forward");
@@ -76,35 +133,21 @@
 	   			var c = cards[cardIndex].classList;
 	   			c.add("flipped");
 	   			cardIndex = cardIndex + 1;
-	   			if (cardIndex == NUM_IMGS){
+	   			if (cardIndex == numImgs){
 	   				clearInterval(myTimer);
 	   			}
 	  		}
 
 	  		function prevCard() {
-	   			var c = cards[cardIndex].classList;
+	   			var c = CARDS[cardIndex].classList;
 	   			c.remove("flipped");
 	   			cardIndex = cardIndex + 1;
-	   			if (cardIndex == NUM_IMGS){
+	   			if (cardIndex == numImgs){
 	   				clearInterval(myTimer);
 	   			}
 	  		}
 	  		
 		}
-
-//Start your engines!!
-createFlipDivs();
-
-//set the direction to flip forward
-var FORWARD = true;
-
-console.log(FORWARD);
-
-//wait to flip over
-setTimeout(flipCards, 1000);
-
-
-//End of image flip
 
 </script>
 
