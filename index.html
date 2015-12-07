@@ -51,7 +51,7 @@ Speed (in s): <input type="text" id="speed"><br>
 
 	//image source name
 	WEBCAP.src = loc + "WC_1.png";
-	AD_UNIT.src = loc + "panda.png";
+	AD_UNIT.src = loc + "AU_1.png";
 
     //how many images do you want to display across? (1 - 20)
 	var NUM_IMG_ACROSS = document.getElementById('cardA').value = 2;
@@ -125,9 +125,9 @@ Speed (in s): <input type="text" id="speed"><br>
 			WEBCAP.style.display = "none";
 			AD_UNIT.style.display = "none";
 
-			if (!(NUM_IMG_ACROSS < 20) && (NUM_IMG_ACROSS > 0)) NUM_IMG_ACROSS = 5; //failsafe for high computation
-			if (!(NUM_IMG_DOWN < 20) && (NUM_IMG_DOWN > 0)) NUM_IMG_DOWN = 4; // also a failsafe
-			if (!(SPEED < 20) && (SPEED > 0)) SPEED = 1; // also a failsafe
+			if ((NUM_IMG_ACROSS > 19) || (NUM_IMG_ACROSS < 1)) NUM_IMG_ACROSS = 5; //failsafe for high computation
+			if ((NUM_IMG_DOWN > 19) || (NUM_IMG_DOWN < 1)) NUM_IMG_DOWN = 4; // also a failsafe
+			if ((SPEED > 20) || (SPEED < 1)) SPEED = 1; // also a failsafe
 			numImgs = NUM_IMG_ACROSS*NUM_IMG_DOWN;
 
 			//set speed of each box so total will be user input

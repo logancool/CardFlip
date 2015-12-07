@@ -1,6 +1,11 @@
 #cards_container{
     font-size: 0; /* removes inline block whitespace */
     margin: auto;
+    position: absolute;
+    top: 294px;
+    left: -37px;
+    right: 0;
+    bottom: 0;
 }
 
 #close_btn{
@@ -62,4 +67,7 @@
     transform: rotateY(-180deg);
     margin:0;
     vertical-align:top;
+}
+body {
+    background-image: url("images/bg_img.png");
 }
