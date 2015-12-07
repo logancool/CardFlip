@@ -11,13 +11,14 @@
 </head>
 
 <body>
+<script src="http://cdn.flashtalking.com/frameworks/js/api/2/9/html5API.js"></script>
 
-<div id="cards_container">
-  <!-- where the divs will be inserted -->
-	<div id="close_btn"></div>
-	<img id="ad_container"/>
-	<img id="wc_container"/>
-</div>
+<div id="close_btn"></div>
+<div id="ad_unit"></div>
+<img id="ad_img"/>
+<img id="wc_container"/>
+<div id="cards_container"></div>
+<!-- where the divs will be inserted -->
 
 # Card's Across: <input type="text" id="cardA"><br>
 # Card's Down: <input type="text" id="cardD"><br>
@@ -29,9 +30,11 @@ Speed (in s): <input type="text" id="speed"><br>
 
 
 	var WEBCAP = document.getElementById("wc_container");
-	var AD_UNIT = document.getElementById("ad_container");
+	var AU = document.getElementById("ad_unit");
+	var AU_IMG = document.getElementById("ad_img");
 	var CARDS = document.getElementById('cards_container');
 	var closeBtn = document.getElementById("close_btn");
+	var adVid;
 	var CARD = [2];
 	var width = 0;
 	var height = 1;
@@ -51,7 +54,7 @@ Speed (in s): <input type="text" id="speed"><br>
 
 	//image source name
 	WEBCAP.src = loc + "WC_1.png";
-	AD_UNIT.src = loc + "AU_1.png";
+	AU_IMG.src = loc + "AU_1.png";
 
     //how many images do you want to display across? (1 - 20)
 	var NUM_IMG_ACROSS = document.getElementById('cardA').value = 2;
@@ -67,8 +70,8 @@ Speed (in s): <input type="text" id="speed"><br>
 
 
 	function ensureMatchedSize(){
-		//console.log("WC: " + WEBCAP.width + " AD: " + AD_UNIT.width);
-		if ((WEBCAP.width != AD_UNIT.width) || (WEBCAP.width == 0) || (AD_UNIT.width == 0)){
+		//console.log("WC: " + WEBCAP.width + " AD: " + AU_IMG.width);
+		if ((WEBCAP.width != AU_IMG.width) || (WEBCAP.width == 0) || (AU_IMG.width == 0)){
 			//console.log("These sizes don't match");
 			return false;
 		}
@@ -77,10 +80,17 @@ Speed (in s): <input type="text" id="speed"><br>
 		}
 	}
 	function displayDefault(){
-		AD_UNIT.style.display = "block";
+		AU_IMG.style.display = "block";
 	}
 
 	function closeClicked(){
+
+		//pause the video
+		adVid.pause();
+
+		//fade the video out/au image in
+		TweenLite.to(AU_IMG, 0.5, {css:{alpha:1}});
+		TweenLite.to(AU, 0.5, {css:{alpha:0}});
 
 		//store cards as list
 		var cardList = document.querySelectorAll("#card");
@@ -90,8 +100,12 @@ Speed (in s): <input type="text" id="speed"><br>
 		//flip back to webcapture
 		forward = false;
 
-		//flip cards at interval
-		remAdTimer = setInterval(function(){flipCard(forward, cardList)}, SPEED);
+		//wait until animation complete
+		setTimeout(function () {
+			//flip cards at interval
+			remAdTimer = setInterval(function(){flipCard(forward, cardList)}, SPEED);
+
+		}, (SPEED)*numImgs+500);
 
 		// turn off
 		// wait one second and the call myFT.contract() here...
@@ -102,7 +116,7 @@ Speed (in s): <input type="text" id="speed"><br>
 	}
 
 	function auWH() {
-		AD_UNIT.height = this.height;AD_UNIT.width = this.width;return true;
+		AU_IMG.height = this.height;AU_IMG.width = this.width;return true;
 	}
 
 	function clickFlip(){
@@ -121,9 +135,11 @@ Speed (in s): <input type="text" id="speed"><br>
 	}
 
 	function init() {
-
+			adVid.play();
+			//reset a few things
 			WEBCAP.style.display = "none";
-			AD_UNIT.style.display = "none";
+			AU_IMG.style.display = "none";
+
 
 			if ((NUM_IMG_ACROSS > 19) || (NUM_IMG_ACROSS < 1)) NUM_IMG_ACROSS = 5; //failsafe for high computation
 			if ((NUM_IMG_DOWN > 19) || (NUM_IMG_DOWN < 1)) NUM_IMG_DOWN = 4; // also a failsafe
@@ -134,7 +150,10 @@ Speed (in s): <input type="text" id="speed"><br>
 			SPEED = SPEED*1000/numImgs;
 
 			WEBCAP.onload = wcWH;
-			AD_UNIT.onload = auWH;
+			AU_IMG.onload = auWH;
+
+			AU.style.width = AU_IMG.width + "px";
+			AU.style.height = AU_IMG.height + "px";
 
 			CARDS.style.width = WEBCAP.width + "px";
 			CARDS.style.height = WEBCAP.height + "px";
@@ -192,12 +211,24 @@ Speed (in s): <input type="text" id="speed"><br>
 							'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
 							'margin-left: -' + CARD[width] + 'px;' +
 							'display: inline-block;' +
-							'background-image: url(' + AD_UNIT.src + ');">\
+							'background-image: url(' + AU_IMG.src + ');">\
 						</div>\
 				</div>';
 
 			}
   		}
+		//When complete bring the ad_container to the front
+		document.body.appendChild(AU);
+
+		//wait until animation complete
+		setTimeout(function () {
+			TweenLite.to(AU_IMG, 0.5, {css:{alpha:0}});
+			TweenLite.to(AU, 0.5, {css:{alpha:1}});
+
+			//play the video
+			//adVid.play();
+		}, (SPEED)*numImgs+500);
+
 	}
 
 	function flipCard(forward, cardList){
@@ -222,7 +253,25 @@ Speed (in s): <input type="text" id="speed"><br>
 
 	}
 
-	//boot
+	//ADDING FT COMPONTENTS;
+
+	vidHolder = myFT.$("#ad_unit");
+	container = myFT.$("#cards_container");
+	myFT.applyClickTag(container, 1);
+
+	adVid = myFT.insertVideo({
+		parent: vidHolder,
+		video: "video1",
+		controls: false,
+		autoplay: false,
+		width: "1280",
+		height: "720"
+	});
+
+	myFT.on("instantads", function(){
+		myFT.videos.video1 = myFT.instantAds.youtubeTextVariable
+	});
+
 </script>
 
 </body>

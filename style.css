@@ -6,6 +6,7 @@
     left: -37px;
     right: 0;
     bottom: 0;
+    z-index: -1;
 }
 
 #close_btn{
@@ -20,13 +21,17 @@
     display: none;
 }
 
-#ad_container, #wc_container {
+#ad_unit, #ad_img, #wc_container {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 294px;
+    left: -37px;
     right: 0;
     bottom: 0;
     margin: auto;
+}
+
+#ad_unit {
+    opacity:0;
 }
 
 #card{
