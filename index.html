@@ -52,13 +52,24 @@
 	var forward;
 	var cardList;
 	var numImgs;
+	var mTop;
+	var mLeft;
 
 //---------begin input --------------//
 
 	//screen adjustments
-	var mTop = 306;
-	var mLeft = 303;
 	var sWidth = 1905;
+
+	function whichSize(sWidth) {
+		if (sWidth == 1280) {
+			mTop = 306;
+			mLeft = 303;
+		}
+		else {
+			mTop = 306;
+			mLeft = 303;
+		}
+	}
 
 	//image source name
 	WEBCAP.src = loc + "WC_1.png";
@@ -75,7 +86,7 @@
 	var ITERATION = 1;
 
 //---------end input --------------//
-
+	whichSize(sWidth);
 	setPadding();
 
 	function ensureMatchedSize(){
@@ -248,13 +259,18 @@
 
 		//wait until animation complete
 		setTimeout(function () {
-			TweenLite.to(AU_IMG, 0.5, {css:{alpha:0}});
-			TweenLite.to(AU, 0.5, {css:{alpha:1}});
-
-			//play the video
-			adVid.play();
+			//if user clicks to view trailer
+			AU.addEventListener("click", clickToPlay);
 		}, (SPEED)*numImgs+500);
 
+	}
+
+	function clickToPlay(){
+		TweenLite.to(AU_IMG, 0.5, {css:{alpha:0}});
+		TweenLite.to(AU, 0.5, {css:{alpha:1}});
+
+		//play the video
+		adVid.play();
 	}
 
 	function flipCard(forward, cardList){
