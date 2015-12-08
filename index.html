@@ -54,6 +54,7 @@
 	var numImgs;
 	var mTop;
 	var mLeft;
+	var vidPlayed = false;
 
 //---------begin input --------------//
 
@@ -266,11 +267,15 @@
 	}
 
 	function clickToPlay(){
-		TweenLite.to(AU_IMG, 0.5, {css:{alpha:0}});
-		TweenLite.to(AU, 0.5, {css:{alpha:1}});
+		if (!vidPlayed) {
+			TweenLite.to(AU_IMG, 0.5, {css: {alpha: 0}});
+			TweenLite.to(AU, 0.5, {css: {alpha: 1}});
 
-		//play the video
-		adVid.play();
+			//play the video
+			adVid.play();
+
+			vidPlayed = true;
+		}
 	}
 
 	function flipCard(forward, cardList){
