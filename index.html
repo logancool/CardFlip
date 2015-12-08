@@ -137,6 +137,9 @@
 		//flip back to webcapture
 		forward = false;
 
+		// turn off the click
+		myFT.clearEvent('');
+
 		//wait until animation complete
 		setTimeout(function () {
 			//flip cards at interval
@@ -144,8 +147,6 @@
 
 		}, (SPEED)*numImgs+500);
 
-		// turn off
-		// wait one second and the call myFT.contract() here...
 	}
 
 	function wcWH() {
@@ -178,6 +179,8 @@
 			AU_IMG.style.display = "none";
 			vidPlayed = false;
 
+			//add the flashtalking components
+			addFT();
 
 			if ((NUM_IMG_ACROSS > 19) || (NUM_IMG_ACROSS < 1)) NUM_IMG_ACROSS = 5; //failsafe for high computation
 			if ((NUM_IMG_DOWN > 19) || (NUM_IMG_DOWN < 1)) NUM_IMG_DOWN = 4; // also a failsafe
@@ -260,6 +263,7 @@
 
 		//wait until animation complete
 		setTimeout(function () {
+
 			//if user clicks to view trailer
 			AU.addEventListener("click", clickToPlay);
 		}, (SPEED)*numImgs+500);
@@ -274,6 +278,10 @@
 			//play the video
 			adVid.play();
 
+			//add clicktag in the video
+			myFT.applyClickTag(vidHolder, 1);
+
+			//set flag so user can't click multiple times
 			vidPlayed = true;
 		}
 	}
@@ -301,23 +309,22 @@
 	}
 
 	//ADDING FT COMPONTENTS;
+	function addFT() {
+		vidHolder = myFT.$("#ad_unit");
 
-	vidHolder = myFT.$("#ad_unit");
-	container = myFT.$("#cards_container");
-	myFT.applyClickTag(container, 1);
+		adVid = myFT.insertVideo({
+			parent: vidHolder,
+			video: "video1",
+			controls: false,
+			autoplay: false,
+			width: "1280",
+			height: "720"
+		});
 
-	adVid = myFT.insertVideo({
-		parent: vidHolder,
-		video: "video1",
-		controls: false,
-		autoplay: false,
-		width: "1280",
-		height: "720"
-	});
-
-	myFT.on("instantads", function(){
-		myFT.videos.video1 = myFT.instantAds.youtubeTextVariable
-	});
+		myFT.on("instantads", function () {
+			myFT.videos.video1 = myFT.instantAds.youtubeTextVariable
+		});
+	}
 
 </script>
 
