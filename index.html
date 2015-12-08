@@ -13,18 +13,20 @@
 <body>
 <script src="http://cdn.flashtalking.com/frameworks/js/api/2/9/html5API.js"></script>
 
-<div id="close_btn"></div>
-<div id="ad_unit"></div>
-<img id="ad_img"/>
-<img id="wc_container"/>
-<div id="cards_container"></div>
-<!-- where the divs will be inserted -->
-
-# Card's Across: <input type="text" id="cardA"><br>
-# Card's Down: <input type="text" id="cardD"><br>
-Speed (in s): <input type="text" id="speed"><br>
-
-<button onclick="clickFlip();">Flip!</button>
+<div id="screen">
+	<div id="close_btn"></div>
+	<div id="ad_unit"></div>
+	<img id="ad_img"/>
+	<img id="wc_container"/>
+	<div id="cards_container"></div>
+	<!-- where the divs will be inserted -->
+	<div id="entry">
+		# Card's Across: <input type="text" id="cardA"><br>
+		# Card's Down: <input type="text" id="cardD"><br>
+		Speed (in s): <input type="text" id="speed"><br>
+		<button id="flipit" onclick="clickFlip();">Flip!</button>
+	</div>
+</div>
 
 <script>
 
@@ -34,6 +36,7 @@ Speed (in s): <input type="text" id="speed"><br>
 	var AU_IMG = document.getElementById("ad_img");
 	var CARDS = document.getElementById('cards_container');
 	var closeBtn = document.getElementById("close_btn");
+	var SCREEN = document.getElementById("screen");
 	var adVid;
 	var CARD = [2];
 	var width = 0;
@@ -52,6 +55,11 @@ Speed (in s): <input type="text" id="speed"><br>
 
 //---------begin input --------------//
 
+	//screen adjustments
+	var mTop = 306;
+	var mLeft = 303;
+	var sWidth = 1905;
+
 	//image source name
 	WEBCAP.src = loc + "WC_1.png";
 	AU_IMG.src = loc + "AU_1.png";
@@ -68,6 +76,7 @@ Speed (in s): <input type="text" id="speed"><br>
 
 //---------end input --------------//
 
+	setPadding();
 
 	function ensureMatchedSize(){
 		//console.log("WC: " + WEBCAP.width + " AD: " + AU_IMG.width);
@@ -81,6 +90,22 @@ Speed (in s): <input type="text" id="speed"><br>
 	}
 	function displayDefault(){
 		AU_IMG.style.display = "block";
+	}
+
+	function setPadding(){
+		SCREEN.style.backgroundSize = sWidth + 'px';
+		SCREEN.style.height = "100%";
+		SCREEN.style.width = sWidth + 'px';
+		CARDS.style.marginTop = mTop + 'px';
+		CARDS.style.marginLeft = mLeft + 'px';
+		WEBCAP.style.marginTop = mTop + 'px';
+		WEBCAP.style.marginLeft = mLeft + 'px';
+		AU.style.marginTop = mTop + 'px';
+		AU.style.marginLeft = mLeft + 'px';
+		AU_IMG.style.marginTop = mTop + 'px';
+		AU_IMG.style.marginLeft = mLeft + 'px';
+
+
 	}
 
 	function closeClicked(){
@@ -135,7 +160,8 @@ Speed (in s): <input type="text" id="speed"><br>
 	}
 
 	function init() {
-			adVid.play();
+
+
 			//reset a few things
 			WEBCAP.style.display = "none";
 			AU_IMG.style.display = "none";
@@ -226,7 +252,7 @@ Speed (in s): <input type="text" id="speed"><br>
 			TweenLite.to(AU, 0.5, {css:{alpha:1}});
 
 			//play the video
-			//adVid.play();
+			adVid.play();
 		}, (SPEED)*numImgs+500);
 
 	}

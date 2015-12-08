@@ -1,12 +1,11 @@
 #cards_container{
+    position: absolute;
     font-size: 0; /* removes inline block whitespace */
     margin: auto;
-    position: absolute;
-    top: 294px;
-    left: -37px;
+    top: 0;
+    left:0;
     right: 0;
     bottom: 0;
-    z-index: -1;
 }
 
 #close_btn{
@@ -23,13 +22,16 @@
 
 #ad_unit, #ad_img, #wc_container {
     position: absolute;
-    top: 294px;
-    left: -37px;
+    top:0;
+    left:0;
     right: 0;
     bottom: 0;
     margin: auto;
 }
 
+#wc_container {
+    z-index: 1;
+}
 #ad_unit {
     opacity:0;
 }
@@ -73,6 +75,29 @@
     margin:0;
     vertical-align:top;
 }
-body {
+#entry {
+    background :red;
+    text-align: center;
+    width: 150px;
+    height: 200px;
+    margin-top:700px;
+    margin-left: 30px;
+
+}
+input[type="text"] {
+    position: relative;
+    display: block;
+    margin : 0 auto;
+}
+
+#flipit {
+    position: relative;
+    display: block;
+    margin : 0 auto;
+}
+
+#screen {
+    position: absolute;
     background-image: url("images/bg_img.png");
+    background-repeat: no-repeat;
 }
