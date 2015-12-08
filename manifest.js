@@ -4,7 +4,7 @@ FT.manifest({
 	"height":720,
 	"clickTagCount":1,
 	"hideBrowsers": ["ie8"],
-	"videos": [{"name": "video1", "ref": "52272/102769_kfp2"}],
+	"videos": [{"name": "video1", "ref": "52272/102774_kfptrailer"}],
 	"instantAds":[
 		{"name":"# Card's Across (1-19)", "type":"text", "default":"5"},
 		{"name":"# Card's Down (1-19)", "type":"text", "default":"4"},
