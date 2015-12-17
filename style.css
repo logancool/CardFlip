@@ -101,3 +101,29 @@ input[type="text"] {
     background-image: url("images/bg_img.png");
     background-repeat: no-repeat;
 }
+
+@media screen and (max-width: 1280px) {
+    #screen {
+        -webkit-transform:scale(0.6);
+        -moz-transform:scale(0.6);
+        -ms-transform:scale(0.6);
+        transform:scale(0.6);
+        top: -170px;
+        left: -334px;
+    }
+
+    #entry {
+        -webkit-transform:scale(1.5);
+        -moz-transform:scale(1.5);
+        -ms-transform:scale(1.5);
+        transform:scale(1.5);
+    }
+
+    #ad_unit {
+        -webkit-transform:scale(0.6);
+        -moz-transform:scale(0.6);
+        -ms-transform:scale(0.6);
+        transform:scale(0.6);
+    }
+
+}
