@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Flipboard Testing</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://cdn.flashtalking.com/frameworks/js/gsap/1.17.0/plugins/CSSPlugin.min.js"></script>
+	<script src="https://cdn.flashtalking.com/frameworks/js/gsap/1.17.0/easing/EasePack.min.js"></script>
+	<script src="https://cdn.flashtalking.com/frameworks/js/gsap/1.17.0/TweenLite.min.js"></script>
+</head>
+
+<body>
+
+<div id="cards_container">
+  <!-- where the divs will be inserted -->
+	<div id="close_btn"></div>
+	<img id="ad_container"/>
+	<img id="wc_container"/>
+</div>
+
+# Card's Across: <input type="text" id="cardA"><br>
+# Card's Down: <input type="text" id="cardD"><br>
+Speed (in s): <input type="text" id="speed"><br>
+
+<button onclick="clickFlip();">Flip!</button>
+
+<script>
+
+
+	var WEBCAP = document.getElementById("wc_container");
+	var AD_UNIT = document.getElementById("ad_container");
+	var CARDS = document.getElementById('cards_container');
+	var closeBtn = document.getElementById("close_btn");
+	var CARD = [2];
+	var width = 0;
+	var height = 1;
+	var wcW, wcH;
+	var auW, auH;
+	var loadedOne = false;
+	var loc = "images/";
+	var offX = 0;
+	var offY = 0;
+	var cardIndex = 0;
+	var dAdTimer, remAdTimer;
+	var forward;
+	var cardList;
+	var numImgs;
+
+//---------begin input --------------//
+
+	//image source name
+	WEBCAP.src = loc + "WC_1.png";
+	AD_UNIT.src = loc + "AU_1.png";
+
+    //how many images do you want to display across? (1 - 20)
+	var NUM_IMG_ACROSS = document.getElementById('cardA').value = 2;
+	var NUM_IMG_DOWN = document.getElementById('cardD').value = 2;
+
+	//define youre speed in seconds you want the animation to take
+	var SPEED = document.getElementById('speed').value = 1;
+
+	//define the time to iterate the flip in seconds. use 0 if not
+	var ITERATION = 1;
+
+//---------end input --------------//
+
+
+	function ensureMatchedSize(){
+		//console.log("WC: " + WEBCAP.width + " AD: " + AD_UNIT.width);
+		if ((WEBCAP.width != AD_UNIT.width) || (WEBCAP.width == 0) || (AD_UNIT.width == 0)){
+			//console.log("These sizes don't match");
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	function displayDefault(){
+		AD_UNIT.style.display = "block";
+	}
+
+	function closeClicked(){
+
+		//store cards as list
+		var cardList = document.querySelectorAll("#card");
+
+		closeBtn.style.display = "none";
+
+		//flip back to webcapture
+		forward = false;
+
+		//flip cards at interval
+		remAdTimer = setInterval(function(){flipCard(forward, cardList)}, SPEED);
+
+		// turn off
+		// wait one second and the call myFT.contract() here...
+	}
+
+	function wcWH() {
+		WEBCAP.height = this.height; WEBCAP.width = this.width;return true;
+	}
+
+	function auWH() {
+		AD_UNIT.height = this.height;AD_UNIT.width = this.width;return true;
+	}
+
+	function clickFlip(){
+		CARDS.innerHTML = "";
+		NUM_IMG_ACROSS = document.getElementById('cardA').value;
+		NUM_IMG_DOWN = document.getElementById('cardD').value;
+		SPEED = document.getElementById('speed').value;
+
+		NUM_IMG_ACROSS = parseInt(NUM_IMG_ACROSS);
+		NUM_IMG_DOWN = parseInt(NUM_IMG_DOWN);
+		SPEED = parseInt(SPEED);
+
+		numImgs = NUM_IMG_ACROSS*NUM_IMG_DOWN;
+
+		init();
+	}
+
+	function init() {
+
+			WEBCAP.style.display = "none";
+			AD_UNIT.style.display = "none";
+
+			if ((NUM_IMG_ACROSS > 19) || (NUM_IMG_ACROSS < 1)) NUM_IMG_ACROSS = 5; //failsafe for high computation
+			if ((NUM_IMG_DOWN > 19) || (NUM_IMG_DOWN < 1)) NUM_IMG_DOWN = 4; // also a failsafe
+			if ((SPEED > 20) || (SPEED < 1)) SPEED = 1; // also a failsafe
+			numImgs = NUM_IMG_ACROSS*NUM_IMG_DOWN;
+
+			//set speed of each box so total will be user input
+			SPEED = SPEED*1000/numImgs;
+
+			WEBCAP.onload = wcWH;
+			AD_UNIT.onload = auWH;
+
+			CARDS.style.width = WEBCAP.width + "px";
+			CARDS.style.height = WEBCAP.height + "px";
+
+			CARD[width] = (WEBCAP.width / NUM_IMG_ACROSS);
+			CARD[height] = (WEBCAP.height / NUM_IMG_DOWN);
+
+			//console.log("CARD width: " + CARD[width]);
+			//console.log("CARD height: " + CARD[height]);
+
+			//prepare divs to flip
+			createFlipDivs();
+
+			closeBtn.addEventListener("click", closeClicked);
+			closeBtn.style.display = "block";
+			document.body.appendChild(closeBtn);
+
+			//if the sizes match, go ahead with the animation
+			if (ensureMatchedSize()) {
+				//store cards as list
+				//console.log("starting");
+				cardList = document.querySelectorAll("#card");
+
+				//flip forward (to ad unit)
+				forward = true;
+
+				//flip cards at interval
+				dAdTimer = setInterval(function () {
+					flipCard(forward, cardList)
+				}, SPEED);
+			}
+			else {
+				displayDefault();
+			}
+
+	}
+
+	function createFlipDivs(){
+		//document.getElementById("random_flip").innerHtml = ""
+		for(var i = 1; i < NUM_IMG_DOWN + 1; i++) {
+			for(var j = 1; j < NUM_IMG_ACROSS + 1; j++) {
+				CARDS.innerHTML = CARDS.innerHTML + '\
+				<div id="card" data-number="' + i + j + '" style="">\
+						<div class="front" style="' +
+							'width:' + CARD[width] + 'px;' +
+							'height:' + CARD[height] + 'px;' +
+							'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
+							'margin-left: -' + offX + 'px;' +
+							'margin-top: -' + offY + 'px;' +
+							'display: inline-block;' +
+							'background-image: url(' + WEBCAP.src + ');"></div>\
+						<div class="back" style="' +
+							'width:' + CARD[width] + 'px;' +
+							'height:' + CARD[height] + 'px;' +
+							'background-position: -' + (j - 1) * CARD[width] + 'px -' + CARD[height] * (i - 1) + 'px;' +
+							'margin-left: -' + CARD[width] + 'px;' +
+							'display: inline-block;' +
+							'background-image: url(' + AD_UNIT.src + ');">\
+						</div>\
+				</div>';
+
+			}
+  		}
+	}
+
+	function flipCard(forward, cardList){
+			var c = cardList[cardIndex].classList;
+			if (forward){
+				c.add("flipped");
+			}
+		    else {
+				c.remove("flipped");
+			}
+
+			cardIndex = cardIndex + 1;
+			//console.log("cardindex: " + cardIndex + " forward: "+ forward + " numImgs" + numImgs);
+			if (((cardIndex >= numImgs) && forward)) {
+				clearInterval(dAdTimer);
+				cardIndex=0;
+			}
+			if (((cardIndex >= numImgs) && !forward)){
+				clearInterval(remAdTimer);
+				cardIndex=0;
+			}
+
+	}
+
+	//boot
+</script>
+
+</body>
+</html>

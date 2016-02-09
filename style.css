@@ -1,0 +1,73 @@
+#cards_container{
+    font-size: 0; /* removes inline block whitespace */
+    margin: auto;
+    position: absolute;
+    top: 294px;
+    left: -37px;
+    right: 0;
+    bottom: 0;
+}
+
+#close_btn{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    z-index: 2;
+    background-image: url('images/close_btn.png');
+    display: none;
+}
+
+#ad_container, #wc_container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#card{
+    display:inline-block;
+    overflow: hidden;
+    margin:0;
+    vertical-align:top;
+    background-repeat:no-repeat;
+    background-position: center center;
+}
+
+#card.flipped .front {
+    -webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+}
+
+#card.flipped .back {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+}
+
+.front,
+.back {
+
+    display: inline-block;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transition: -webkit-transform 0.3s;
+    transition: transform 0.3s;
+    margin:0;
+    align:left;
+    vertical-align:top;
+}
+
+.back {
+    position:absolute;
+    -webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+    margin:0;
+    vertical-align:top;
+}
+body {
+    background-image: url("images/bg_img.png");
+}
