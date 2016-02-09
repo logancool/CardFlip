@@ -1,0 +1,162 @@
+#bg {
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#yes, #no {
+    position:relative;
+    text-align: center;
+    line-height: 3.5;
+}
+
+
+#container {
+    margin: 0 auto;
+}
+
+
+/* BUTTON EFFECT*/
+
+/**** SHARED EFFECT PROPS *****/
+
+.yes-effect, .no-effect {
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+    display: inline-block;
+}
+
+.yes-effect, .no-effect div {
+    font-weight: 700;
+    -webkit-transition: color 0.3s;
+    -moz-transition: color 0.3s;
+    transition: color 0.3s;
+}
+
+#yestxt div::before, #notxt div::before{
+    opacity: 0;
+    -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+    -moz-transition: -moz-transform 0.3s, opacity 0.3s;
+    transition: transform 0.3s, opacity 0.3s;
+}
+.yes-effect div::before,
+.yes-effect div::after,
+.no-effect div::before,
+.no-effect div::after{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 50%;
+    height: 20px;
+    margin-top: -1px;
+    content: '';
+    z-index: -1;
+    opacity: 0;
+    -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+    -moz-transition: -moz-transform 0.3s, opacity 0.3s;
+    transition: transform 0.3s, opacity 0.3s;
+    pointer-events: none;
+}
+
+/**** YES EFFECT ***/
+
+.yes-effect div::before {
+    -webkit-transform: translateY(-20px);
+    -moz-transform: translateY(-20px);
+    transform: translateY(0px);
+}
+
+.yes-effect div::after {
+    -webkit-transform: translateY(0px);
+    -moz-transform: translateY(20px);
+    transform: translateY(00px);
+}
+
+.yes-effect div:hover,
+.yes-effect div:focus {
+    color: greenyellow;
+}
+
+.yes-effect div:hover::before,
+.yes-effect div:hover::after,
+.yes-effect div:focus::before,
+.yes-effect div:focus::after {
+    opacity: 0.7;
+}
+
+.yes-effect div:hover::before,
+.yes-effect div:focus::before {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+    width: 50%;
+}
+
+.yes-effect div:hover::after,
+.yes-effect div:focus::after {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.yes-effect div{
+    color: greenyellow;
+}
+.yes-effect div::before,
+.yes-effect div::after {
+    background: green;
+    -webkit-transition: width 2.3s, opacity 0.3s;
+    -moz-transition: width 2.3s, opacity 0.3s;
+    transition: transform 0.3s, width 0.3s, opacity 0.3s;
+}
+
+/*** NO EFFECT ***/
+
+.no-effect div{
+    color: red;
+}
+.no-effect div::before,
+.no-effect div::after {
+    background: red;
+}
+
+.no-effect div::before {
+    -webkit-transform: translateY(-20px);
+    -moz-transform: translateY(-20px);
+    transform: translateY(-20px);
+}
+
+.no-effect div::after {
+    -webkit-transform: translateY(20px);
+    -moz-transform: translateY(20px);
+    transform: translateY(20px);
+}
+
+.no-effect div:hover,
+.no-effect div:focus {
+    color: orangered;
+}
+
+.no-effect div:hover::before,
+.no-effect div:hover::after,
+.no-effect div:focus::before,
+.no-effect div:focus::after {
+    opacity: 0.7;
+}
+
+.no-effect div:hover::before,
+.no-effect div:focus::before {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.no-effect div:hover::after,
+.no-effect div:focus::after {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
